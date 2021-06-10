@@ -406,9 +406,9 @@
 		reg = <0x69>;
 	};
 
-	power-supply@6a {
+	power-supply@6d {
 		compatible = "ibm,cffps";
-		reg = <0x6a>;
+		reg = <0x6d>;
 	};
 
 	power-supply@6b {
