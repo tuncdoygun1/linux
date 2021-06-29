@@ -34,6 +34,9 @@
 #define SCU_AST2600_MISC_CTRL			0x0c0
 #define  SCU_AST2600_MISC_CTRL_XDMA_BMC		 BIT(8)
 
+#define SCU_AST2600_DEBUG_CTRL			0x0c8
+#define  DEBUG_CTRL_XDMA_DISABLE	 	 BIT(2)
+
 #define SCU_AST2500_PCIE_CONF			0x180
 #define SCU_AST2600_PCIE_CONF			0xc20
 #define  SCU_PCIE_CONF_VGA_EN			 BIT(0)
@@ -831,10 +834,15 @@ static int aspeed_xdma_init_scu(struct aspeed_xdma *ctx, struct device *dev)
 		regmap_update_bits(scu, ctx->chip->scu_pcie_conf, bmc | vga,
 				   selection);
 
-		if (ctx->chip->scu_misc_ctrl)
+		if (ctx->chip->scu_misc_ctrl) {
 			regmap_update_bits(scu, ctx->chip->scu_misc_ctrl,
 					   SCU_AST2600_MISC_CTRL_XDMA_BMC,
 					   SCU_AST2600_MISC_CTRL_XDMA_BMC);
+
+			/* Allow XDMA to be used on AST2600 */
+			regmap_update_bits(scu, SCU_AST2600_DEBUG_CTRL,
+					   DEBUG_CTRL_XDMA_DISABLE, 0);
+		}
 	} else {
 		dev_warn(dev, "Unable to configure PCIe: %ld; continuing.\n",
 			 PTR_ERR(scu));
