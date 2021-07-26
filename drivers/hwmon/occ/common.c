@@ -808,6 +808,7 @@ static int occ_setup_sensor_attrs(struct occ *occ)
 		show_temp = occ_show_temp_2;
 		break;
 	case 0x10:
+		num_attrs += (sensors->temp.num_sensors * 5);
 		show_temp = occ_show_temp_10;
 		break;
 	default:
@@ -909,6 +910,15 @@ static int occ_setup_sensor_attrs(struct occ *occ)
 			attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
 						     show_temp, NULL, 3, i);
 			attr++;
+
+			if (sensors->temp.version == 0x10) {
+				snprintf(attr->name, sizeof(attr->name),
+					 "temp%d_max", s);
+				attr->sensor = OCC_INIT_ATTR(attr->name, 0444,
+							     show_temp, NULL,
+							     4, i);
+				attr++;
+			}
 		}
 	}
 
