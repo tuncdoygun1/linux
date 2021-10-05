@@ -492,8 +492,8 @@ static int aspeed_adc_probe(struct platform_device *pdev)
 
 	data = iio_priv(indio_dev);
 	data->dev = &pdev->dev;
-	data->model_data = of_device_get_match_data(&pdev->dev);
 	platform_set_drvdata(pdev, indio_dev);
+	data->model_data = of_device_get_match_data(&pdev->dev);
 
 	data->base = devm_platform_ioremap_resource(pdev, 0);
 	if (IS_ERR(data->base))
@@ -512,7 +512,7 @@ static int aspeed_adc_probe(struct platform_device *pdev)
 
 	ret = devm_add_action_or_reset(data->dev,
 				       aspeed_adc_unregister_fixed_divider,
-				       data->clk_prescaler);
+				       data->fixed_div_clk);
 	if (ret)
 		return ret;
 	snprintf(clk_parent_name, ARRAY_SIZE(clk_parent_name), clk_name);
