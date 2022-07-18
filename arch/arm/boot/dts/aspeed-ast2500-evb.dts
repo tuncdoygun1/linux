@@ -157,6 +157,18 @@
 		reg = <0x4f>;
 		status = "okay";
 	};
+
+	temp4@49 {
+		compatible = "ti,tmp275";
+		reg = <0x49>;
+		status = "okay";
+	};
+		
+	temp5@4c {
+		compatible = "ti,tmp275";
+		reg = <0x4c>;
+		status = "okay";
+	};	
 };
 
 &i2c3 {
