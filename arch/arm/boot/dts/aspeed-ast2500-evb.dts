@@ -2,7 +2,7 @@
 /dts-v1/;
 
 #include "aspeed-g5.dtsi"
-
+#include <dt-bindings/gpio/aspeed-gpio.h>
 / {
 	model = "AST2500 EVB";
 	compatible = "aspeed,ast2500";
@@ -31,7 +31,32 @@
 			compatible = "shared-dma-pool";
 			reusable;
 		};
+
+		video_engine_memory: jpegbuffer {
+			size = <0x02000000>;	/* 32MM */
+			alignment = <0x01000000>;
+			compatible = "shared-dma-pool";
+			reusable;
+ 		};		
 	};
+	
+/*
+	gpio-keys {
+	   compatible = "gpio-keys, aspeed,ast2500-gpio";
+	   
+	   powerAction {
+	     label = "powerAction";
+	     gpios = <&gpio ASPEED_GPIO(Z, 2) GPIO_LINE_OPEN_DRAIN>;
+	     linux,code = <&gpio ASPEED_GPIO(Z, 2)>;
+	   };
+	   
+	   powerStatus {
+	     label = "powerStatus";
+	     gpios = <&gpio ASPEED_GPIO(Z, 0) GPIO_ACTIVE_LOW>;
+	     linux,code = <&gpio ASPEED_GPIO(Z, 0)>;
+	   };
+	 };
+*/
 };
 
 &fmc {
@@ -43,12 +68,20 @@
 		spi-max-frequency = <50000000>;
 #include "openbmc-flash-layout.dtsi"
 	};
+	
+	flash@1 {
+		status = "okay";
+		m25p,fast-read;
+		label = "bmc_backup";
+		spi-max-frequency = <50000000>;
+#include "openbmc-flash-layout_backup.dtsi"
+	};	
 };
 
 &spi1 {
-	status = "okay";
+	status = "disabled";
 	flash@0 {
-		status = "okay";
+		status = "disabled";
 		m25p,fast-read;
 		label = "pnor";
 		spi-max-frequency = <100000000>;
@@ -57,24 +90,73 @@
 
 &spi2 {
 	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_spi2ck_default &pinctrl_spi2cs0_default &pinctrl_spi2miso_default &pinctrl_spi2mosi_default>;
+
+	flash@0 {
+		status = "okay";
+		m25p,fast-read;
+		label = "ubifs";
+		spi-max-frequency = <50000000>;
+	};
 };
 
 &uart5 {
 	status = "okay";
 };
 
+/*
 &mac0 {
 	status = "okay";
 
 	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_rgmii1_default &pinctrl_mdio1_default>;
+	pinctrl-0 = <&pinctrl_rmii1_default &pinctrl_mdio1_default>;
+	// Below is the default MAC address and it should be updated via u-boot
+	mac-address = [00 03 73 00 00 00];
+
+	phy-mode = "rmii";
+    fixed-link = <0 1 1000 0 0>;
+
+	mdio1:mdio {
+
+        #address-cells = <1>;
+        #size-cells = <0>;
+	};
+};
+*/
+
+ &mac1 {
+ 	status = "okay";
+ 
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_rgmii2_default &pinctrl_mdio2_default>;
+	/*Below is the default MAC address and it should be updated via u-boot*/
+	mac-address = [00 03 73 00 00 00];
+
+	phy-mode = "rgmii";
 };
 
-&mac1 {
+&i2c0 {
 	status = "okay";
+	//Airmax Conn B, CPU0 PIROM, CPU1 PIROM
 
-	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_rgmii2_default &pinctrl_mdio2_default>;
+	temp1@48 {
+		compatible = "ti,tmp275";
+		reg = <0x48>;
+		status = "okay";
+	};
+		
+	temp2@4a {
+		compatible = "ti,tmp275";
+		reg = <0x4a>;
+		status = "okay";
+	};
+	
+	temp3@4f {
+		compatible = "ti,tmp275";
+		reg = <0x4f>;
+		status = "okay";
+	};
 };
 
 &i2c3 {
@@ -128,6 +210,11 @@
 &gfx {
      status = "okay";
      memory-region = <&gfx_memory>;
+};
+
+&video {
+	status = "okay";
+	memory-region = <&video_engine_memory>;
 };
 
 &rtc {
