@@ -185,6 +185,50 @@ leds {
 	};
 };
 
+&i2c1 {
+	status = "okay";
+
+	tps53679@60 {
+		compatible = "ti,tps53679";
+		reg = <0x60>;
+	};
+
+	tps53679@62 {
+		compatible = "ti,tps53679";
+		reg = <0x62>;
+	};
+	
+	tps53622@66 {
+		compatible = "ti,tps53679";
+		reg = <0x66>;
+	};
+	
+	tps53622@68 {
+		compatible = "ti,tps53679";
+		reg = <0x68>;
+	};
+
+	tps53659@70 {
+		compatible = "ti,tps53679";
+		reg = <0x70>;
+	};
+		
+	tps53659@72 {
+		compatible = "ti,tps53679";
+		reg = <0x72>;
+	};
+	
+	tps53659@74 {
+		compatible = "ti,tps53679";
+		reg = <0x74>;
+	};
+	
+	tps53659@75 {
+		compatible = "ti,tps53679";
+		reg = <0x75>;
+	};
+};
+
 &i2c2 {
 	status = "okay";
 
