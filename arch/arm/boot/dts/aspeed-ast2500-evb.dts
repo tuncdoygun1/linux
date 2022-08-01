@@ -145,30 +145,35 @@
 		reg = <0x48>;
 		status = "okay";
 	};
-		
-	temp2@4a {
-		compatible = "ti,tmp275";
-		reg = <0x4a>;
-		status = "okay";
-	};
 	
-	temp3@4f {
-		compatible = "ti,tmp275";
-		reg = <0x4f>;
-		status = "okay";
-	};
-
-	temp4@49 {
+	temp2@49 {
 		compatible = "ti,tmp275";
 		reg = <0x49>;
 		status = "okay";
 	};
 		
-	temp5@4c {
+	temp3@4a {
+		compatible = "ti,tmp275";
+		reg = <0x4a>;
+		status = "okay";
+	};
+		
+	temp4@4c {
 		compatible = "ti,tmp275";
 		reg = <0x4c>;
 		status = "okay";
-	};	
+	};
+
+	temp5@4f {
+		compatible = "ti,tmp275";
+		reg = <0x4f>;
+		status = "okay";
+	};
+};
+
+&i2c2 {
+	status = "okay";
+
 };
 
 &i2c3 {
