@@ -145,6 +145,10 @@ leds {
 	status = "okay";
 };
 
+&vuart {
+	status = "okay";
+};
+
 /*
 &mac0 {
 	status = "okay";
@@ -289,31 +293,26 @@ leds {
 	fan@0 {
 		reg = <0x00>;
 		aspeed,fan-tach-ch = /bits/ 8 <0x00>;
-		#cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
 	};
 	
 	fan@1 {
 		reg = <0x01>;
 		aspeed,fan-tach-ch = /bits/ 8 <0x01>;
-		#cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
 	};
 	
 	fan@2 {
 		reg = <0x02>;
 		aspeed,fan-tach-ch = /bits/ 8 <0x02>;
-		#cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
 	};
 	
 	fan@3 {
 		reg = <0x03>;
 		aspeed,fan-tach-ch = /bits/ 8 <0x03>;
-		#cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
 	};
 	
 	fan@4 {
 		reg = <0x04>;
 		aspeed,fan-tach-ch = /bits/ 8 <0x04>;
-		#cooling-levels = /bits/ 8 <125 151 177 203 229 255>;
 	};
 };
 
