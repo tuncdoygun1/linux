@@ -60,7 +60,7 @@ leds {
 };
 	
 	gpio-keys {
-	   compatible = "gpio-keys, aspeed,ast2500-gpio";  
+	   compatible = "gpio-keys";  
 	   powerButton {
 	     label = "powerButton";
 	     gpios = <&gpio ASPEED_GPIO(Z, 0) GPIO_ACTIVE_HIGH>;
