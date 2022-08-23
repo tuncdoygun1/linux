@@ -66,6 +66,11 @@ leds {
 	     gpios = <&gpio ASPEED_GPIO(Z, 0) GPIO_ACTIVE_HIGH>;
 	     linux,code = <135>;
 	   };
+	   fmSmiActive {
+	     label = "fmSmiActive";
+	     gpios = <&gpio ASPEED_GPIO(AA, 6) GPIO_ACTIVE_HIGH>;
+	     linux,code = <136>;
+	   };
 	 };
 };
 
