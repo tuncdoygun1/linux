@@ -40,25 +40,25 @@
  		};		
 	};
 
-leds {
-	compatible = "gpio-leds";
+	leds {
+		compatible = "gpio-leds";
 
-	led_amber {
-		label = "led_amber";
-		gpios = <&gpio ASPEED_GPIO(C, 1) GPIO_ACTIVE_LOW>;
+		led_amber {
+			label = "led_amber";
+			gpios = <&gpio ASPEED_GPIO(C, 1) GPIO_ACTIVE_LOW>;
+		};
+			
+		led_green {
+			label = "led_green";
+			gpios = <&gpio ASPEED_GPIO(S, 4) GPIO_ACTIVE_LOW>;
+		};
+			
+		led_id {
+			label = "led_id";
+			gpios = <&gpio ASPEED_GPIO(S, 6) GPIO_ACTIVE_LOW>;
+		};		
 	};
 		
-	led_green {
-		label = "led_green";
-		gpios = <&gpio ASPEED_GPIO(S, 4) GPIO_ACTIVE_LOW>;
-	};
-		
-	led_id {
-		label = "led_id";
-		gpios = <&gpio ASPEED_GPIO(S, 6) GPIO_ACTIVE_LOW>;
-	};		
-};
-	
 	gpio-keys {
 	   compatible = "gpio-keys";  
 	   powerButton {
@@ -67,6 +67,14 @@ leds {
 	     linux,code = <135>;
 	   };
 	};
+	
+	iio-hwmon {
+		compatible = "iio-hwmon";
+		io-channels = <&adc 0>, <&adc 1>, <&adc 2>, <&adc 3>,
+		<&adc 4>, <&adc 5>, <&adc 6>, <&adc 7>,
+		<&adc 8>, <&adc 9>, <&adc 10>,<&adc 11>,
+		<&adc 12>,<&adc 13>,<&adc 14>,<&adc 15>;
+	};	
 };
 
 &fmc {
@@ -86,6 +94,19 @@ leds {
 		spi-max-frequency = <50000000>;
 #include "openbmc-flash-layout_backup.dtsi"
 	};	
+};
+
+&adc {
+	status = "okay";
+};
+
+&lpc_ctrl {
+	status = "okay";
+};
+
+&lpc_snoop {
+	status = "okay";
+	snoop-ports = <0x80>;
 };
 
 &spi1 {
