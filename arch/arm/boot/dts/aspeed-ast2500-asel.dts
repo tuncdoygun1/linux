@@ -326,11 +326,6 @@
 		reg = <0x03>;
 		aspeed,fan-tach-ch = /bits/ 8 <0x03>;
 	};
-	
-	fan@4 {
-		reg = <0x04>;
-		aspeed,fan-tach-ch = /bits/ 8 <0x04>;
-	};
 };
 
 &peci0 {
