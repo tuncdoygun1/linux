@@ -115,7 +115,7 @@
 };
 
 &uart_routing {
-	status = "okay";
+	status = "disabled";
 };
 
 &spi1 {
@@ -172,7 +172,7 @@
 };
 
 &vuart {
-	status = "disabled";
+	status = "okay";
 };
 
 /*
