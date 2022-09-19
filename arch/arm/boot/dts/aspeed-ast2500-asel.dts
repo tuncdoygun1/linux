@@ -109,6 +109,15 @@
 	snoop-ports = <0x80>;
 };
 
+&kcs3 {
+	aspeed,lpc-io-reg = <0xca2>;
+	status = "okay";
+};
+
+&uart_routing {
+	status = "okay";
+};
+
 &spi1 {
 	status = "disabled";
 	flash@0 {
@@ -163,7 +172,7 @@
 };
 
 &vuart {
-	status = "okay";
+	status = "disabled";
 };
 
 /*
