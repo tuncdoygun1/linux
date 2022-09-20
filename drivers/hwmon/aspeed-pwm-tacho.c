@@ -587,7 +587,7 @@ static ssize_t pwm_store(struct device *dev, struct device_attribute *attr,
 		return count;
 
 	priv->pwm_port_fan_ctrl[index] = fan_ctrl;
-	aspeed_set_pwm_port_fan_ctrl(priv, index, fan_ctrl);
+	aspeed_set_pwm_port_fan_ctrl(priv, index, (255 - fan_ctrl));
 
 	return count;
 }
