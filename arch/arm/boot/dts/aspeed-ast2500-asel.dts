@@ -58,15 +58,6 @@
 			gpios = <&gpio ASPEED_GPIO(S, 6) GPIO_ACTIVE_LOW>;
 		};		
 	};
-		
-	gpio-keys {
-	   compatible = "gpio-keys";  
-	   powerButton {
-	     label = "powerButton";
-	     gpios = <&gpio ASPEED_GPIO(Z, 0) GPIO_ACTIVE_HIGH>;
-	     linux,code = <135>;
-	   };
-	};
 	
 	iio-hwmon {
 		compatible = "iio-hwmon";
@@ -116,7 +107,7 @@
 
 &ibt {
 	status = "okay";
-}
+};
 
 &uart_routing {
 	status = "disabled";
