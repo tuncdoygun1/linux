@@ -111,8 +111,12 @@
 
 &kcs3 {
 	aspeed,lpc-io-reg = <0xca2>;
-	status = "okay";
+	status = "disabled";
 };
+
+&ibt {
+	status = "okay";
+}
 
 &uart_routing {
 	status = "disabled";
@@ -180,28 +184,22 @@
 	status = "okay";
 
 	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_rmii1_default &pinctrl_mdio1_default>;
+	pinctrl-0 = <&pinctrl_rgmii1_default &pinctrl_mdio1_default>;
 	// Below is the default MAC address and it should be updated via u-boot
 	mac-address = [00 03 73 00 00 00];
 
-	phy-mode = "rmii";
-    fixed-link = <0 1 1000 0 0>;
+	phy-mode = "rgmii";
 
-	mdio1:mdio {
-
-        #address-cells = <1>;
-        #size-cells = <0>;
-	};
 };
 */
 
- &mac1 {
+&mac1 {
  	status = "okay";
  
  	pinctrl-names = "default";
  	pinctrl-0 = <&pinctrl_rgmii2_default &pinctrl_mdio2_default>;
 	/*Below is the default MAC address and it should be updated via u-boot*/
-	mac-address = [00 03 73 00 00 00];
+	mac-address = [00 03 73 00 00 01];
 
 	phy-mode = "rgmii";
 };
