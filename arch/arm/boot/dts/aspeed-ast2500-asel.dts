@@ -103,8 +103,8 @@
 };
 
 &lpc_snoop {
-	status = "disabled";
-	snoop-ports = <0x80>;
+	status = "okay";
+	snoop-ports = <0x3f8>;
 };
 
 &kcs1 {
@@ -136,6 +136,8 @@
 };
 
 &uart_routing {
+// HICRA route sel2DW
+	reg = <0x9c 0x4>;
 	status = "disabled";
 };
 
