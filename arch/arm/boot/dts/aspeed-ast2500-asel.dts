@@ -98,22 +98,22 @@
 
 &lpc_ctrl {
 	status = "okay";
-	memory-region = <&flash_memory>;
+	//memory-region = <&flash_memory>;
 	//flash = <&spi2>;	
 };
 
 &lpc_snoop {
 	status = "okay";
-	snoop-ports = <0x3f8>;
+	snoop-ports = <0x80>, <0x81>;
 };
 
 &kcs1 {
-	status = "okay";
+	status = "disabled";
 	aspeed,lpc-io-reg = <0x60>;
 };
 
 &kcs2 {
-	status = "okay";
+	status = "disabled";
 	aspeed,lpc-io-reg = <0x62>;
 };
 
@@ -123,7 +123,7 @@
 };
 
 &kcs4 {
-	status = "okay";
+	status = "disabled";
 	aspeed,lpc-io-reg = <0x97DE>;
 };
 
@@ -304,7 +304,12 @@
 
 &i2c2 {
 	status = "okay";
-
+    
+    ipmb@10 {
+        compatible = "ipmb-dev";
+        reg = <0x10>;
+        i2c-protocol;
+    };
 };
 
 &i2c3 {
