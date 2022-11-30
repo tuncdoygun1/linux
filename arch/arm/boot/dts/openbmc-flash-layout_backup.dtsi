@@ -7,31 +7,31 @@ partitions {
 
 	u-boot_backup@0 {
 		reg = <0x0 0x60000>;
-		label = "u-boot_backup";
+		label = "alt-u-boot";
 	};
 
 	u-boot-env_backup@60000 {
 		reg = <0x60000 0x10000>;
-		label = "u-boot-env_backup";
+		label = "alt-u-boot-env";
 	};
 
 	kernel_backup@70000 {
 		reg = <0x70000 0x4B0000>;
-		label = "kernel_backup";
+		label = "alt-kernel";
 	};
 
 	rofs_backup@520000 {
 		reg = <0x520000 0x1740000>;
-		label = "rofs_backup";
+		label = "alt-rofs";
 	};
 
 	rwfs_backup@1C60000 {
 		reg = <0x1C60000 0x390000>;
-		label = "rwfs_backup";
+		label = "alt-rwfs";
 	};
 
 	dtb_backup@1FF0000 {
 		reg = <0x1FF0000 0x10000>;
-		label = "dtb_backup";
+		label = "alt-dtb";
 	};
 };
