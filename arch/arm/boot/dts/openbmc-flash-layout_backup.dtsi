@@ -5,33 +5,33 @@ partitions {
 	#address-cells = <1>;
 	#size-cells = <1>;
 
-	u-boot@0 {
+	u-boot_backup@0 {
 		reg = <0x0 0x60000>;
-		label = "u-boot";
+		label = "alt-u-boot";
 	};
 
-	u-boot-env@60000 {
+	u-boot-env_backup@60000 {
 		reg = <0x60000 0x10000>;
-		label = "u-boot-env";
+		label = "alt-u-boot-env";
 	};
 
-	kernel@70000 {
+	kernel_backup@70000 {
 		reg = <0x70000 0x4B0000>;
-		label = "kernel";
+		label = "alt-kernel";
 	};
 
-	rofs@520000 {
+	rofs_backup@520000 {
 		reg = <0x520000 0x1740000>;
-		label = "rofs";
+		label = "alt-rofs";
 	};
 
-	rwfs@1C60000 {
+	rwfs_backup@1C60000 {
 		reg = <0x1C60000 0x390000>;
-		label = "rwfs";
+		label = "alt-rwfs";
 	};
-	
-	dtb@1FF0000 {
+
+	dtb_backup@1FF0000 {
 		reg = <0x1FF0000 0x10000>;
-		label = "dtb";
-	};	
+		label = "alt-dtb";
+	};
 };

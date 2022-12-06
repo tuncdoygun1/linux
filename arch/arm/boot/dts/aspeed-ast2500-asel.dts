@@ -1,0 +1,439 @@
+// SPDX-License-Identifier: GPL-2.0+
+/dts-v1/;
+
+#include "aspeed-g5.dtsi"
+#include <dt-bindings/gpio/aspeed-gpio.h>
+/ {
+	model = "AST2500 ASELSAN";
+	compatible = "aspeed,ast2500";
+
+	aliases {
+		serial4 = &uart5;
+	};
+
+	chosen {
+		stdout-path = &uart5;
+		bootargs = "console=tty0 console=ttyS4,115200 earlycon";
+	};
+
+	memory@80000000 {
+		reg = <0x80000000 0x20000000>;
+	};
+
+	reserved-memory {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges;
+
+		gfx_memory: framebuffer {
+			size = <0x01000000>;
+			alignment = <0x01000000>;
+			compatible = "shared-dma-pool";
+			reusable;
+		};
+
+		video_engine_memory: jpegbuffer {
+			size = <0x02000000>;	/* 32MM */
+			alignment = <0x01000000>;
+			compatible = "shared-dma-pool";
+			reusable;
+ 		};
+ 		
+		flash_memory: region@98000000 {
+			no-map;
+			reg = <0x98000000 0x02000000>; /* 32M */
+		};	
+	};
+
+	leds {
+		compatible = "gpio-leds";
+
+		led_amber {
+			label = "led_amber";
+			gpios = <&gpio ASPEED_GPIO(C, 1) GPIO_ACTIVE_LOW>;
+		};
+			
+		led_green {
+			label = "led_green";
+			gpios = <&gpio ASPEED_GPIO(S, 4) GPIO_ACTIVE_LOW>;
+		};
+			
+		led_id {
+			label = "led_id";
+			gpios = <&gpio ASPEED_GPIO(S, 6) GPIO_ACTIVE_LOW>;
+		};		
+	};
+	
+	iio-hwmon {
+		compatible = "iio-hwmon";
+		io-channels = <&adc 0>, <&adc 1>, <&adc 2>, <&adc 3>,
+		<&adc 4>, <&adc 5>, <&adc 6>, <&adc 7>,
+		<&adc 8>, <&adc 9>, <&adc 10>,<&adc 11>,
+		<&adc 12>,<&adc 13>,<&adc 14>,<&adc 15>;
+	};	
+};
+
+&fmc {
+	status = "okay";
+	flash@0 {
+		status = "okay";
+		m25p,fast-read;
+		label = "bmc";
+		spi-max-frequency = <50000000>;
+#include "openbmc-flash-layout.dtsi"
+	};
+	
+	flash@1 {
+		status = "okay";
+		m25p,fast-read;
+		label = "alt-bmc";
+		spi-max-frequency = <50000000>;
+#include "openbmc-flash-layout_backup.dtsi"
+	};	
+};
+
+&adc {
+	status = "okay";
+};
+
+&lpc_ctrl {
+	status = "okay";
+	//memory-region = <&flash_memory>;
+	//flash = <&spi2>;	
+};
+
+&lpc_snoop {
+	status = "okay";
+	snoop-ports = <0x80>, <0x81>;
+};
+
+&kcs1 {
+	status = "disabled";
+	aspeed,lpc-io-reg = <0x60>;
+};
+
+&kcs2 {
+	status = "disabled";
+	aspeed,lpc-io-reg = <0x62>;
+};
+
+&kcs3 {
+	status = "okay";
+	aspeed,lpc-io-reg = <0xCA2>;
+};
+
+&kcs4 {
+	status = "disabled";
+	aspeed,lpc-io-reg = <0x97DE>;
+};
+
+&ibt {
+	status = "disabled";
+};
+
+&wdt2 {
+	aspeed,alt-boot;
+};
+
+&uart_routing {
+// HICRA route sel2DW
+	reg = <0x9c 0x4>;
+	status = "disabled";
+};
+
+&spi1 {
+	status = "disabled";
+	flash@0 {
+		status = "disabled";
+		m25p,fast-read;
+		label = "pnor";
+		spi-max-frequency = <100000000>;
+	};
+};
+
+&spi2 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_spi2ck_default &pinctrl_spi2cs0_default &pinctrl_spi2miso_default &pinctrl_spi2mosi_default>;
+
+	flash@0 {
+		status = "okay";
+		m25p,fast-read;
+		label = "ubifs";
+		spi-max-frequency = <50000000>;
+	};
+};
+
+&uart1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_txd1_default
+			     &pinctrl_rxd1_default
+			     &pinctrl_nrts1_default
+			     &pinctrl_ndtr1_default
+			     &pinctrl_ndsr1_default
+			     &pinctrl_ncts1_default
+			     &pinctrl_ndcd1_default
+			     &pinctrl_nri1_default>;
+};
+
+&uart2 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_txd2_default
+			     &pinctrl_rxd2_default
+			     &pinctrl_nrts2_default
+			     &pinctrl_ndtr2_default
+			     &pinctrl_ndsr2_default
+			     &pinctrl_ncts2_default
+			     &pinctrl_ndcd2_default
+			     &pinctrl_nri2_default>;
+};
+
+&uart5 {
+	status = "okay";
+};
+
+&vuart {
+	status = "okay";
+};
+
+/*
+&mac0 {
+	status = "okay";
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_rgmii1_default &pinctrl_mdio1_default>;
+	// Below is the default MAC address and it should be updated via u-boot
+	mac-address = [00 03 73 00 00 00];
+
+	phy-mode = "rgmii";
+
+};
+*/
+
+&mac1 {
+ 	status = "okay";
+ 
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_rgmii2_default &pinctrl_mdio2_default>;
+	/*Below is the default MAC address and it should be updated via u-boot*/
+	mac-address = [00 03 73 00 00 01];
+
+	phy-mode = "rgmii";
+};
+
+&i2c0 {
+	status = "okay";
+	//Airmax Conn B, CPU0 PIROM, CPU1 PIROM
+
+	temp1@48 {
+		compatible = "ti,tmp275";
+		reg = <0x48>;
+		status = "okay";
+	};
+	
+	temp2@49 {
+		compatible = "ti,tmp275";
+		reg = <0x49>;
+		status = "okay";
+	};
+		
+	temp3@4a {
+		compatible = "ti,tmp275";
+		reg = <0x4a>;
+		status = "okay";
+	};
+		
+	temp4@4c {
+		compatible = "ti,tmp275";
+		reg = <0x4c>;
+		status = "okay";
+	};
+
+	temp5@4f {
+		compatible = "ti,tmp275";
+		reg = <0x4f>;
+		status = "okay";
+	};
+};
+
+&i2c1 {
+	status = "okay";
+
+	tps53679@60 {
+		compatible = "ti,tps53679";
+		reg = <0x60>;
+	};
+
+	tps53679@62 {
+		compatible = "ti,tps53679";
+		reg = <0x62>;
+	};
+	
+	tps53622@66 {
+		compatible = "ti,tps53679";
+		reg = <0x66>;
+	};
+	
+	tps53622@68 {
+		compatible = "ti,tps53679";
+		reg = <0x68>;
+	};
+
+	tps53659@70 {
+		compatible = "ti,tps53679";
+		reg = <0x70>;
+	};
+		
+	tps53659@72 {
+		compatible = "ti,tps53679";
+		reg = <0x72>;
+	};
+	
+	tps53659@74 {
+		compatible = "ti,tps53679";
+		reg = <0x74>;
+	};
+	
+	tps53659@75 {
+		compatible = "ti,tps53679";
+		reg = <0x75>;
+	};
+};
+
+&i2c2 {
+	status = "okay";
+    
+    ipmb@10 {
+        compatible = "ipmb-dev";
+        reg = <0x10>;
+        i2c-protocol;
+    };
+};
+
+&i2c3 {
+	status = "okay";
+
+	eeprom@50 {
+		compatible = "atmel,24c08";
+		reg = <0x50>;
+		pagesize = <16>;
+	};
+};
+
+&i2c7 {
+	status = "okay";
+
+	lm75@4d {
+		compatible = "national,lm75";
+		reg = <0x4d>;
+	};
+};
+
+&pwm_tacho {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_pwm0_default &pinctrl_pwm1_default
+				 &pinctrl_pwm2_default &pinctrl_pwm3_default>;
+
+	fan@0 {
+		reg = <0x00>;
+		aspeed,fan-tach-ch = /bits/ 8 <0x00>;
+	};
+	
+	fan@1 {
+		reg = <0x01>;
+		aspeed,fan-tach-ch = /bits/ 8 <0x01>;
+	};
+	
+	fan@2 {
+		reg = <0x02>;
+		aspeed,fan-tach-ch = /bits/ 8 <0x02>;
+	};
+	
+	fan@3 {
+		reg = <0x03>;
+		aspeed,fan-tach-ch = /bits/ 8 <0x03>;
+	};
+};
+
+&peci0 {
+	status = "okay";
+};
+
+&sdmmc {
+	status = "okay";
+};
+
+&sdhci0 {
+	status = "okay";
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_sd1_default>;
+};
+
+/*
+ * Enable port A as device (via the virtual hub) and port B as
+ * host by default on the eval board. This can be easily changed
+ * by replacing the override below with &ehci0 { ... } to enable
+ * host on both ports.
+ */
+&vhub {
+	status = "okay";
+};
+
+&ehci1 {
+	status = "okay";
+};
+
+&uhci {
+	status = "okay";
+};
+
+&gfx {
+     status = "okay";
+     memory-region = <&gfx_memory>;
+};
+
+&video {
+	status = "okay";
+	memory-region = <&video_engine_memory>;
+};
+
+&rtc {
+	status = "okay";
+};
+&gpio {
+	gpio-line-names =
+	/*A0-A7*/	"","","","","","","","",
+	/*B0-B7*/	"","","","","","","","",
+	/*C0-C7*/	"","","","","","","","",
+	/*D0-D7*/	"","","","","","","","",
+	/*E0-E7*/	"","","","","","","","",
+	/*F0-F7*/	"","","","","","","","",
+	/*G0-G7*/	"","","","","","","","",
+	/*H0-H7*/	"","","","","","","","",
+	/*I0-I7*/	"","","","","","","","",
+	/*J0-J7*/	"","","","","","","","",
+	/*K0-K7*/	"","","","","","","","",
+	/*L0-L7*/	"","","","","","","","",
+	/*M0-M7*/	"","","","","","","","",
+	/*N0-N7*/	"","","","",
+		        "","","","",
+	/*O0-O7*/	"","","","","","","","",
+	/*P0-P7*/	"","","","","","","","",
+	/*Q0-Q7*/	"","","","","","","","",
+	/*R0-R7*/	"","","","","","","","",
+	/*S0-S7*/	"","","","","","","","",
+	/*T0-T7*/	"","","","","","","","",
+	/*U0-U7*/	"","","","","","","","",
+	/*V0-V7*/	"","","","","","","","",
+	/*W0-W7*/	"","","","","","","","",
+	/*X0-X7*/	"","","","","","","","",
+	/*Y0-Y7*/	"","","","","","","","",
+	/*Z0-Z7*/	"","host0-ready","","","","","","",
+	/*AA0-AA7*/	"","","","","","","","",
+	/*AB0-AB7*/	"","","","","","","","",
+	/*AC0-AC7*/	"","","","","","","","";
+};
