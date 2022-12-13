@@ -1,36 +1,37 @@
-# SPDX-License-Identifier: GPL-2.0-only
+#
+# Platform Environment Control Interface (PECI) subsystem configuration
+#
 
-menuconfig PECI
+menu "PECI support"
+
+config PECI
 	tristate "PECI support"
+	select CRC8
 	help
-	  The Platform Environment Control Interface (PECI) is an interface
-	  that provides a communication channel to Intel processors and
-	  chipset components from external monitoring or control devices.
+	  The Platform Environment Control Interface (PECI) is a one-wire bus
+	  interface that provides a communication channel from Intel processors
+	  and chipset components to external monitoring or control devices.
 
-	  If you are building a Baseboard Management Controller (BMC) kernel
-	  for Intel platform say Y here and also to the specific driver for
-	  your adapter(s) below. If unsure say N.
+	  If you want PECI support, you should say Y here and also to the
+	  specific driver for your bus adapter(s) below.
 
 	  This support is also available as a module. If so, the module
-	  will be called peci.
+	  will be called peci-core.
 
 if PECI
 
-config PECI_CPU
-	tristate "PECI CPU"
-	select AUXILIARY_BUS
+config PECI_CHARDEV
+	tristate "PECI device interface"
 	help
-	  This option enables peci-cpu driver for Intel processors. It is
-	  responsible for creating auxiliary devices that can subsequently
-	  be used by other drivers in order to perform various
-	  functionalities such as e.g. temperature monitoring.
+	  Say Y here to use peci-* device files, usually found in the /dev
+	  directory on your system. They make it possible to have user-space
+	  programs use the PECI bus.
 
-	  Additional drivers must be enabled in order to use the functionality
-	  of the device.
+	  This support is also available as a module. If so, the module
+	  will be called peci-dev.
 
-	  This driver can also be built as a module. If so, the module
-	  will be called peci-cpu.
-
-source "drivers/peci/controller/Kconfig"
+source "drivers/peci/busses/Kconfig"
 
 endif # PECI
+
+endmenu
