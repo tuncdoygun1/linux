@@ -1,4 +1,4 @@
-# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+# SPDX-License-Identifier: GPL-2.0
 %YAML 1.2
 ---
 $id: http://devicetree.org/schemas/peci/peci-aspeed.yaml#
@@ -7,11 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
 title: Aspeed PECI Bus Device Tree Bindings
 
 maintainers:
-  - Iwona Winiarska <iwona.winiarska@intel.com>
   - Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
-
-allOf:
-  - $ref: peci-controller.yaml#
 
 properties:
   compatible:
@@ -23,11 +19,19 @@ properties:
   reg:
     maxItems: 1
 
+  "#address-cells":
+    # Required to define a client address.
+    const: 1
+
+  "#size-cells":
+    # Required to define a client address.
+    const: 0
+
   interrupts:
     maxItems: 1
 
   clocks:
-    description:
+    description: |
       Clock source for PECI controller. Should reference the external
       oscillator clock.
     maxItems: 1
@@ -35,38 +39,86 @@ properties:
   resets:
     maxItems: 1
 
-  cmd-timeout-ms:
-    minimum: 1
-    maximum: 1000
-    default: 1000
-
   clock-frequency:
-    description:
-      The desired operation frequency of PECI controller in Hz.
-    minimum: 2000
-    maximum: 2000000
-    default: 1000000
+    # Operation frequency of PECI controller in units of Hz.
+    minimum: 187500
+    maximum: 24000000
+
+  msg-timing:
+    description: |
+      Message timing negotiation period. This value will determine the period
+      of message timing negotiation to be issued by PECI controller. The unit
+      of the programmed value is four times of PECI clock period.
+    allOf:
+      - $ref: /schemas/types.yaml#/definitions/uint32
+      - minimum: 0
+        maximum: 255
+        default: 1
+
+  addr-timing:
+    description: |
+      Address timing negotiation period. This value will determine the period
+      of address timing negotiation to be issued by PECI controller. The unit
+      of the programmed value is four times of PECI clock period.
+    allOf:
+      - $ref: /schemas/types.yaml#/definitions/uint32
+      - minimum: 0
+        maximum: 255
+        default: 1
+
+  rd-sampling-point:
+    description: |
+      Read sampling point selection. The whole period of a bit time will be
+      divided into 16 time frames. This value will determine the time frame
+      in which the controller will sample PECI signal for data read back.
+      Usually in the middle of a bit time is the best.
+    allOf:
+      - $ref: /schemas/types.yaml#/definitions/uint32
+      - minimum: 0
+        maximum: 15
+        default: 8
+
+  cmd-timeout-ms:
+    # Command timeout in units of ms.
+    allOf:
+      - $ref: /schemas/types.yaml#/definitions/uint32
+      - minimum: 1
+        maximum: 60000
+        default: 1000
 
 required:
   - compatible
   - reg
+  - "#address-cells"
+  - "#size-cells"
   - interrupts
   - clocks
   - resets
-
-additionalProperties: false
+  - clock-frequency
 
 examples:
   - |
     #include <dt-bindings/interrupt-controller/arm-gic.h>
     #include <dt-bindings/clock/ast2600-clock.h>
-    peci-controller@1e78b000 {
-      compatible = "aspeed,ast2600-peci";
-      reg = <0x1e78b000 0x100>;
-      interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
-      clocks = <&syscon ASPEED_CLK_GATE_REF0CLK>;
-      resets = <&syscon ASPEED_RESET_PECI>;
-      cmd-timeout-ms = <1000>;
-      clock-frequency = <1000000>;
+    peci: bus@1e78b000 {
+        compatible = "simple-bus";
+        #address-cells = <1>;
+        #size-cells = <1>;
+        ranges = <0x0 0x1e78b000 0x60>;
+
+        peci0: peci-bus@0 {
+            compatible = "aspeed,ast2600-peci";
+            reg = <0x0 0x100>;
+            #address-cells = <1>;
+            #size-cells = <0>;
+            interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
+            clocks = <&syscon ASPEED_CLK_GATE_REF0CLK>;
+            resets = <&syscon ASPEED_RESET_PECI>;
+            clock-frequency = <24000000>;
+            msg-timing = <1>;
+            addr-timing = <1>;
+            rd-sampling-point = <8>;
+            cmd-timeout-ms = <1000>;
+        };
     };
 ...

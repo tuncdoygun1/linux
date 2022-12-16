@@ -1,7 +1,9 @@
-.. SPDX-License-Identifier: GPL-2.0-only
+.. SPDX-License-Identifier: GPL-2.0
 
 Kernel driver peci-cputemp
 ==========================
+
+:Copyright: |copy| 2018-2019 Intel Corporation
 
 Supported chips:
 	One of Intel server CPUs listed below which is connected to a PECI bus.
@@ -26,23 +28,24 @@ Supported chips:
 			Intel Xeon Gold family
 			Intel Xeon Platinum family
 
+	Addresses scanned: PECI client address 0x30 - 0x37
 	Datasheet: Available from http://www.intel.com/design/literature.htm
 
-Author: Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
+Author:
+	Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>
 
 Description
 -----------
 
 This driver implements a generic PECI hwmon feature which provides Digital
 Thermal Sensor (DTS) thermal readings of the CPU package and CPU cores that are
-accessible via the processor PECI interface.
+accessible using the PECI Client Command Suite via the processor PECI client.
 
 All temperature values are given in millidegree Celsius and will be measurable
 only when the target CPU is powered on.
 
-Sysfs interface
+``sysfs`` interface
 -------------------
-
 ======================= =======================================================
 temp1_label		"Die"
 temp1_input		Provides current die temperature of the CPU package.
@@ -55,8 +58,7 @@ temp1_crit_hyst		Provides the hysteresis value from Tcontrol to Tjmax of
 			the CPU package.
 
 temp2_label		"DTS"
-temp2_input		Provides current temperature of the CPU package scaled
-			to match DTS thermal profile.
+temp2_input		Provides current DTS temperature of the CPU package.
 temp2_max		Provides thermal control temperature of the CPU package
 			which is also known as Tcontrol.
 temp2_crit		Provides shutdown temperature of the CPU package which
@@ -86,5 +88,8 @@ temp5_input		Provides the maximum junction temperature, Tjmax of the
 temp[6-N]_label		Provides string "Core X", where X is resolved core
 			number.
 temp[6-N]_input		Provides current temperature of each core.
-
+temp[6-N]_max		Provides thermal control temperature of the core.
+temp[6-N]_crit		Provides shutdown temperature of the core.
+temp[6-N]_crit_hyst	Provides the hysteresis value from Tcontrol to Tjmax of
+			the core.
 ======================= =======================================================
