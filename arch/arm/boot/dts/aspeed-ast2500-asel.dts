@@ -104,7 +104,7 @@
 
 &lpc_snoop {
 	status = "okay";
-	snoop-ports = <0x80>, <0x81>;
+	snoop-ports = <0x3F8>;
 };
 
 &kcs1 {
@@ -360,6 +360,16 @@
 
 &peci0 {
 	status = "okay";
+	
+    peci-client@30 {
+        compatible = "intel,peci-client";
+        reg = <0x30>;
+    };
+    
+    peci-client@31 {
+        compatible = "intel,peci-client";
+         reg = <0x31>;
+    };		
 };
 
 &sdmmc {
