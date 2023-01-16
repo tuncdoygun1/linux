@@ -223,7 +223,7 @@
 	phy-mode = "rgmii";
 };
 
-&i2c0 {
+&i2c0 { // temp sensors
 	status = "okay";
 	//Airmax Conn B, CPU0 PIROM, CPU1 PIROM
 
@@ -258,7 +258,7 @@
 	};
 };
 
-&i2c1 {
+&i2c1 { // power supplies
 	status = "okay";
 
 	tps53679@60 {
@@ -302,7 +302,7 @@
 	};
 };
 
-&i2c2 {
+&i2c2 { // chipset
 	status = "okay";
     
     ipmb@10 {
@@ -312,23 +312,21 @@
     };
 };
 
-&i2c3 {
+&i2c3 { // pmbus power supply
 	status = "okay";
 
-	eeprom@50 {
-		compatible = "atmel,24c08";
-		reg = <0x50>;
-		pagesize = <16>;
+	psu@58 {
+		compatible = "pmbus";
+		reg = <0x58>;
 	};
 };
 
-&i2c7 {
-	status = "okay";
+&i2c4 { // PCIE
+	status = "disabled";
+};
 
-	lm75@4d {
-		compatible = "national,lm75";
-		reg = <0x4d>;
-	};
+&i2c5 { // BMC_I2C
+	status = "disabled";
 };
 
 &pwm_tacho {
