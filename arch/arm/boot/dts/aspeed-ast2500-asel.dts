@@ -98,7 +98,7 @@
 
 &lpc_ctrl {
 	status = "okay";
-	//memory-region = <&flash_memory>;
+	memory-region = <&flash_memory>;
 	//flash = <&spi2>;	
 };
 

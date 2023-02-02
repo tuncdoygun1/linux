@@ -123,7 +123,7 @@ static long aspeed_lpc_ctrl_ioctl(struct file *file, unsigned int cmd,
 		 * low 16 bits set. Both HICR7 and HICR8 talk about the top 16
 		 * bits of addresses and sizes.
 		 */
-
+		printk("aspeed_lpc_ctrl_ioctl 111 \n");
 		if ((map.size & 0x0000ffff) || (map.offset & 0x0000ffff))
 			return -EINVAL;
 
@@ -131,9 +131,10 @@ static long aspeed_lpc_ctrl_ioctl(struct file *file, unsigned int cmd,
 		 * Because of the way the masks work in HICR8 offset has to
 		 * be a multiple of size.
 		 */
+		printk("aspeed_lpc_ctrl_ioctl 222 \n");
 		if (map.offset & (map.size - 1))
 			return -EINVAL;
-
+		printk("aspeed_lpc_ctrl_ioctl 333 \n");
 		if (map.window_type == ASPEED_LPC_CTRL_WINDOW_FLASH) {
 			if (!lpc_ctrl->pnor_size) {
 				dev_dbg(dev, "Didn't find host pnor flash\n");
@@ -149,6 +150,8 @@ static long aspeed_lpc_ctrl_ioctl(struct file *file, unsigned int cmd,
 			}
 			addr = lpc_ctrl->mem_base;
 			size = lpc_ctrl->mem_size;
+
+			printk("aspeed_lpc_ctrl_ioctl 444 \n");
 		} else {
 			return -EINVAL;
 		}
@@ -176,12 +179,12 @@ static long aspeed_lpc_ctrl_ioctl(struct file *file, unsigned int cmd,
 				(addr | (map.addr >> 16)));
 		if (rc)
 			return rc;
-
+		printk("aspeed_lpc_ctrl_ioctl 777 \n");
 		rc = regmap_write(lpc_ctrl->regmap, HICR8,
 				(~(map.size - 1)) | ((map.size >> 16) - 1));
 		if (rc)
 			return rc;
-
+		printk("aspeed_lpc_ctrl_ioctl 888 \n");
 		/*
 		 * Switch to FWH2AHB mode, AST2600 only.
 		 */
@@ -209,7 +212,7 @@ static long aspeed_lpc_ctrl_ioctl(struct file *file, unsigned int cmd,
 				HICR5_ENFWH | HICR5_ENL2H,
 				HICR5_ENFWH | HICR5_ENL2H);
 	}
-
+	printk("aspeed_lpc_ctrl_ioctl 999 \n");
 	return -EINVAL;
 }
 
@@ -280,6 +283,9 @@ static int aspeed_lpc_ctrl_probe(struct platform_device *pdev)
 			return -EINVAL;
 		}
 	}
+
+	dev_err(dev, "reserved memory lpc success..\n");
+	dev_err(dev, "reserved memory lpc mem_size = %x mem_base = %x\n", lpc_ctrl->mem_size, lpc_ctrl->mem_base);
 
 	np = pdev->dev.parent->of_node;
 	if (!of_device_is_compatible(np, "aspeed,ast2400-lpc-v2") &&
