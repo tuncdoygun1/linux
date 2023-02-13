@@ -104,7 +104,7 @@
 
 &lpc_snoop {
 	status = "okay";
-	snoop-ports = <0x3F8>;
+	snoop-ports = <0x80>;
 };
 
 &kcs1 {
