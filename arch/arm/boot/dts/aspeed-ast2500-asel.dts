@@ -321,6 +321,11 @@
 		compatible = "pmbus";
 		reg = <0x58>;
 	};
+
+	psu@59 {
+		compatible = "pmbus";
+		reg = <0x59>;
+	};	
 };
 
 &i2c4 { // PCIE
