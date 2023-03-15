@@ -333,7 +333,12 @@
 };
 
 &i2c5 { // BMC_I2C
-	status = "disabled";
+	status = "okay";
+	eeprom@50 {
+		compatible = "atmel,24c02";
+		reg = <0x50>;
+		pagesize = <16>;
+	};
 };
 
 &pwm_tacho {
