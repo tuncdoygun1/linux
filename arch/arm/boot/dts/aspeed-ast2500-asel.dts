@@ -305,7 +305,7 @@
 };
 
 &i2c2 { // chipset
-	status = "okay";
+	status = "disabled";
     
     ipmb@10 {
         compatible = "ipmb-dev";
@@ -345,7 +345,8 @@
 	status = "okay";
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_pwm0_default &pinctrl_pwm1_default
-				 &pinctrl_pwm2_default &pinctrl_pwm3_default>;
+				 &pinctrl_pwm2_default &pinctrl_pwm3_default
+				 &pinctrl_pwm4_default &pinctrl_pwm5_default>;
 
 	fan@0 {
 		reg = <0x00>;
@@ -366,6 +367,16 @@
 		reg = <0x03>;
 		aspeed,fan-tach-ch = /bits/ 8 <0x03>;
 	};
+	
+	fan@4 {
+		reg = <0x04>;
+		aspeed,fan-tach-ch = /bits/ 8 <0x04>;
+	};
+	
+	fan@5 {
+		reg = <0x05>;
+		aspeed,fan-tach-ch = /bits/ 8 <0x05>;
+	};	
 };
 
 &peci0 {
