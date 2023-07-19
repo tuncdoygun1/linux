@@ -195,11 +195,11 @@
 &uart5 {
 	status = "okay";
 };
-
+/*
 &vuart {
 	status = "okay";
 };
-
+*/
 /*
 &mac0 {
 	status = "okay";
